@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WEBSITE PANEL JASTEB ALVIANZ, WHISKII, LUCCAS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* ==================== ANIMASI & GAYA UMUM ==================== */
+        @keyframes glowing {
+            0% { text-shadow: 0 0 5px #00ffff, 0 0 10px #ff00ff, 0 0 15px #00ffff; }
+            50% { text-shadow: 0 0 20px #00ffff, 0 0 30px #ff00ff, 0 0 40px #00ffff; }
+            100% { text-shadow: 0 0 5px #00ffff, 0 0 10px #ff00ff, 0 0 15px #00ffff; }
+        }
+        @keyframes background-pan {
+            0% { background-position: 0% center; }
+            100% { background-position: -200% center; }
+        }
+        @keyframes vibrant-gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0.1; }
+            50% { opacity: 1; }
+        }
+        body {
+            background-color: #0d0d0d;
+            color: #fff;
+            font-family: 'Montserrat', sans-serif;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(-45deg, #ff0077, #7700ff, #0077ff, #ff0077);
+            background-size: 400% 400%;
+            animation: vibrant-gradient 15s ease infinite;
+        }
+
+        /* ==================== TAMPILAN HALAMAN DEPAN ==================== */
+        #access-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 600px;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .bg-text-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .bg-text {
+            white-space: nowrap;
+            font-size: 3em;
+            font-weight: bold;
+            opacity: 0.05;
+            background: linear-gradient(90deg, #ff0077, #7700ff, #0077ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: background-pan 30s linear infinite;
+        }
+        #access-page img {
+            max-width: 90%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+            margin-bottom: 30px;
+        }
+        #access-page h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3em;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            margin-bottom: 20px;
+            animation: glowing 1.5s infinite alternate;
+        }
+        #access-page p {
+            font-style: italic;
+            color: #aaa;
+            margin-bottom: 20px;
+        }
+        .access-form {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 25px;
+            border-radius: 10px;
+            border: 1px solid #333;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+        }
+        .access-form input[type="text"] {
+            padding: 12px;
+            border-radius: 5px;
+            border: none;
+            width: 250px;
+            background-color: #222;
+            color: #fff;
+            margin-bottom: 15px;
+        }
+        .access-form button {
+            padding: 12px 25px;
+            border-radius: 5px;
+            border: none;
+            background: linear-gradient(45deg, #00ffff, #ff0077);
+            color: #1a1a1a;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .access-form button:hover {
+            transform: scale(1.05);
+        }
+        #error-message {
+            color: #ff0000;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        
+        /* ==================== TAMPILAN JEDA ==================== */
+        #jeda-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 10;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        #jeda-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://files.catbox.moe/8eoo32.jpeg');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.2;
+            animation: fadeInOut 5s ease-in-out infinite;
+        }
+        #jeda-message {
+            font-family: 'Playfair Display', serif;
+            font-size: 2em;
+            text-transform: uppercase;
+            animation: glowing 1.5s infinite alternate;
+            margin: 20px;
+            z-index: 11;
+        }
+
+        /* ==================== TAMPILAN PANEL ==================== */
+        #panel-content {
+            display: none; /* Awalnya disembunyikan */
+            width: 100%;
+            max-width: 600px;
+            position: relative;
+            z-index: 2;
+        }
+        .container {
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+        #panel-content h1 { 
+            font-family: 'Playfair Display', serif; 
+            text-align: center; 
+            color: #fff;
+            animation: glowing 1.5s infinite alternate;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        p { text-align: center; font-style: italic; color: #aaa; }
+        label { display: block; margin-top: 15px; margin-bottom: 5px; font-weight: bold; color: #fff; }
+        input[type="number"], input[type="text"] { 
+            display: block; width: 100%; padding: 12px; margin-bottom: 15px; 
+            box-sizing: border-box; border: 1px solid #555; border-radius: 5px; 
+            background-color: #222; color: #fff; font-size: 16px;
+        }
+        .panel-button { 
+            display: block; width: 100%; padding: 15px; margin-top: 20px; 
+            border: none; border-radius: 5px; cursor: pointer; 
+            font-size: 18px; font-weight: bold; 
+            background: linear-gradient(90deg, #00ffff, #ff0077);
+            background-size: 200% 100%;
+            transition: background-position 0.5s;
+            color: #1a1a1a;
+        }
+        .panel-button:hover { background-position: -100% 0; }
+        .status { margin-top: 20px; padding: 15px; border-radius: 5px; text-align: center; }
+        .success { background-color: rgba(0, 255, 0, 0.2); color: #00ff00; border: 1px solid #00ff00; }
+        .error { background-color: rgba(255, 0, 0, 0.2); color: #ff0000; border: 1px solid #ff0000; }
+        .watermark {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.8em;
+            color: #555;
+        }
+        
+        .recipient-input {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .recipient-input input {
+            flex-grow: 1;
+            margin-right: 10px;
+        }
+
+        .recipient-input button {
+            width: auto;
+            padding: 8px 12px;
+            font-size: 1.2em;
+            background: #ff0077;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .recipient-input button:hover {
+            background: #ff3399;
+        }
+        
+        /* ==================== TAMPILAN MENGAMBANG UNTUK AKUN ==================== */
+        #floating-display {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 500px;
+            height: 80vh;
+            background-color: rgba(0, 0, 0, 0.85);
+            border-radius: 15px;
+            border: 1px solid rgba(0, 255, 255, 0.5);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
+            z-index: 100;
+            padding: 20px;
+            overflow-y: auto;
+            text-align: left;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+        .floating-header {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #00ffff;
+            animation: glowing 1.5s infinite alternate;
+        }
+        .account-item {
+            background-color: #1a1a1a;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 2px solid;
+            border-image: linear-gradient(45deg, #ff0077, #7700ff) 1;
+            box-shadow: 0 0 10px rgba(255, 0, 119, 0.3);
+            position: relative;
+            animation: fadeIn 0.5s ease-in-out;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .account-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0, 255, 255, 0.5);
+        }
+        .account-item p {
+            margin: 0;
+            padding: 5px 0;
+            color: #fff;
+            text-align: left;
+            font-size: 1.1em;
+            word-wrap: break-word;
+        }
+        .account-item span {
+            color: #aaa;
+            font-weight: bold;
+            display: inline-block;
+            width: 80px;
+        }
+        .copy-button {
+            background: linear-gradient(45deg, #00ffff, #ff0077);
+            border: none;
+            color: #1a1a1a;
+            font-weight: bold;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            float: right;
+            transition: transform 0.2s;
+            margin-top: -10px;
+        }
+        .copy-button:hover {
+            transform: scale(1.1);
+        }
+        .close-button {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5em;
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            cursor: pointer;
+        }
+        .live-timer {
+            font-size: 1em;
+            font-weight: bold;
+            color: #00ff00;
+            text-align: center;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="access-page">
+        <div class="bg-text-container">
+            <div class="bg-text">TEAM JASTEB PRIVATE!!!</div>
+            <div class="bg-text">TEAM JASTEB PRIVATE!!!</div>
+            <div class="bg-text">TEAM JASTEB PRIVATE!!!</div>
+            <div class="bg-text">TEAM JASTEB PRIVATE!!!</div>
+            <div class="bg-text">TEAM JASTEB PRIVATE!!!</div>
+            <div class="bg-text">TEAM JASTEB PRIVATE!!!</div>
+            <div class="bg-text">TEAM JASTEB PRIVATE!!!</div>
+            <div class="bg-text">TEAM JASTEB PRIVATE!!!</div>
+            <div class="bg-text">TEAM JASTEB PRIVATE!!!</div>
+            <div class="bg-text">TEAM JASTEB PRIVATE!!!</div>
+            <div class="bg-text">TEAM JASTEB PRIVATE!!!</div>
+            <div class="bg-text">TEAM JASTEB PRIVATE!!!</div>
+            <div class="bg-text">TEAM JASTEB PRIVATE!!!</div>
+            <div class="bg-text">TEAM JASTEB PRIVATE!!!</div>
+            <div class="bg-text">TEAM JASTEB PRIVATE!!!</div>
+            <div class="bg-text">TEAM JASTEB PRIVATE!!!</div>
+            <div class="bg-text">TEAM JASTEB PRIVATE!!!</div>
+            <div class="bg-text">TEAM JASTEB PRIVATE!!!</div>
+            <div class="bg-text">TEAM JASTEB PRIVATE!!!</div>
+            <div class="bg-text">TEAM JASTEB PRIVATE!!!</div>
+            <div class="bg-text">TEAM JASTEB PRIVATE!!!</div>
+            <div class="bg-text">TEAM JASTEB PRIVATE!!!</div>
+            <div class="bg-text">TEAM JASTEB PRIVATE!!!</div>
+            <div class="bg-text">TEAM JASTEB PRIVATE!!!</div>
+            <div class="bg-text">TEAM JASTEB PRIVATE!!!</div>
+            <div class="bg-text">TEAM JASTEB PRIVATE!!!</div>
+            <div class="bg-text">TEAM JASTEB PRIVATE!!!</div>
+            <div class="bg-text">TEAM JASTEB PRIVATE!!!</div>
+            <div class="bg-text">TEAM JASTEB PRIVATE!!!</div>
+            <div class="bg-text">TEAM JASTEB PRIVATE!!!</div>
+        </div>
+        <div class="container">
+            <img src="https://files.catbox.moe/4tpmyz.png" alt="Team Jasteb Private">
+            <h1>ACCESS REQUIRED</h1>
+            <p>This is a private panel. Please enter the correct code to proceed.</p>
+            <div class="access-form">
+                <input type="text" id="accessCode" placeholder="Masukkan Kode..." required>
+                <button onclick="checkCode()">MASUK</button>
+                <div id="error-message"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="jeda-container">
+        <h1 id="jeda-message">LOCOKEUN DUA REBUAN AH💦💦</h1>
+    </div>
+
+    <div id="panel-content">
+        <div class="container">
+            <h1>WEBSITE PANEL JASTEB</h1>
+            <h1>ALVIANZ, WHISKII, LUCCAS</h1>
+            <p>Your portal to exclusive account data.</p>
+
+            <label for="jumlah">Jumlah Akun:</label>
+            <input type="number" id="jumlah" value="5" min="1" max="400" required>
+
+            <label for="jeda">Jeda Pengiriman (detik):</label>
+            <input type="number" id="jeda" value="10" min="0" required>
+
+            <label>Penerima Telegram:</label>
+            <div id="recipient-container">
+                <div class="recipient-input">
+                    <input type="text" class="username-input" placeholder="cth: username_anda" required>
+                    <button type="button" onclick="removeRecipient(this)">x</button>
+                </div>
+            </div>
+            <button class="add-recipient-button panel-button" type="button" onclick="addRecipient()">+ Tambah Penerima</button>
+
+            <button class="panel-button" id="kirimBtn">KIRIM AKUN SEKARANG</button>
+
+            <div class="status" id="status"></div>
+        </div>
+        
+        <div class="watermark">
+            <p>v1.2 - Alvianz:@alvianzjasteb [TELEGRAM]</p>
+        </div>
+    </div>
+
+    <div id="floating-display">
+        <button class="close-button" onclick="document.getElementById('floating-display').style.display='none';">&times;</button>
+        <div class="floating-header">DATA AKUN YANG DIKIRIM</div>
+        <div id="floating-status" class="status"></div>
+        <div id="account-list"></div>
+    </div>
+
+    <script>
+        const correctCode = 'LWA-8272672928277626';
+        const buttonSound = new Audio('https://single-amethyst-gnno5fi8ih.edgeone.app/ssstik.io_1757530281024.mp3');
+        const panelSound = new Audio('https://alvianzlx.github.io/pusatjasteb/panel-sound.mp3');
+
+        // Pastikan suara tombol diputar setiap kali tombol diklik
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('click', () => {
+                buttonSound.play().catch(e => console.error("Error playing sound:", e));
+            });
+        });
+
+        // Juga putar suara saat menekan Enter di input kode
+        document.getElementById('accessCode').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                buttonSound.play().catch(e => console.error("Error playing sound:", e));
+                checkCode();
+            }
+        });
+
+        function checkCode() {
+            const code = document.getElementById('accessCode').value;
+            const errorMessage = document.getElementById('error-message');
+            const accessPage = document.getElementById('access-page');
+            const jedaContainer = document.getElementById('jeda-container');
+            const panelContent = document.getElementById('panel-content');
+
+            if (code === correctCode) {
+                accessPage.style.display = 'none';
+                jedaContainer.style.display = 'flex';
+
+                setTimeout(() => {
+                    jedaContainer.style.display = 'none';
+                    panelContent.style.display = 'block';
+                    panelSound.play().catch(e => console.error("Error playing panel sound:", e));
+                }, 10000); // Jeda 10 detik
+            } else {
+                errorMessage.textContent = 'Kode yang Anda masukkan salah. Mohon coba lagi.';
+            }
+        }
+        
+        async function copyToClipboard(text) {
+            try {
+                await navigator.clipboard.writeText(text);
+                alert('Berhasil disalin ke clipboard!');
+            } catch (err) {
+                console.error('Gagal menyalin: ', err);
+                alert('Gagal menyalin. Silakan salin manual.');
+            }
+        }
+
+        function addRecipient() {
+            const container = document.getElementById('recipient-container');
+            const newDiv = document.createElement('div');
+            newDiv.className = 'recipient-input';
+            newDiv.innerHTML = `
+                <input type="text" class="username-input" placeholder="cth: username_anda" required>
+                <button type="button" onclick="removeRecipient(this)">x</button>
+            `;
+            container.appendChild(newDiv);
+        }
+
+        function removeRecipient(button) {
+            const container = document.getElementById('recipient-container');
+            if (container.children.length > 1) {
+                container.removeChild(button.parentElement);
+            }
+        }
+
+
+        document.getElementById('kirimBtn').addEventListener('click', async () => {
+            const jumlah = parseInt(document.getElementById('jumlah').value);
+            const jeda = parseInt(document.getElementById('jeda').value);
+            const usernameInputs = document.querySelectorAll('.username-input');
+            const recipients = Array.from(usernameInputs).map(input => input.value.trim()).filter(username => username !== '');
+
+            const statusDiv = document.getElementById('status');
+            const floatingDisplay = document.getElementById('floating-display');
+            const accountList = document.getElementById('account-list');
+            const floatingStatus = document.getElementById('floating-status');
+            
+            const botToken = '8447926154:AAGt6ULglIiNOKWLVuY3Hsy5P917k9SW5Kc';
+            const apiUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
+            const getUpdatesUrl = `https://api.telegram.org/bot${botToken}/getUpdates`;
+            const loginOptions = ['Facebook', 'Google', 'Email', 'Twitter'];
+
+            if (recipients.length === 0 || jumlah <= 0 || jeda < 0) {
+                statusDiv.className = 'status error';
+                statusDiv.textContent = '❌ Mohon isi semua kolom dengan benar.';
+                return;
+            }
+
+            statusDiv.className = 'status';
+            statusDiv.textContent = '⏳ Memulai pengiriman... Mohon tunggu.';
+            
+            // Tampilkan floating display
+            floatingDisplay.style.display = 'block';
+            accountList.innerHTML = '';
+            floatingStatus.className = 'status';
+            floatingStatus.textContent = 'Memulai pengiriman akun...';
+
+            try {
+                const updatesResponse = await fetch(getUpdatesUrl);
+                const updatesData = await updatesResponse.json();
+                
+                if (!updatesData.ok) {
+                    throw new Error(`Gagal mendapatkan Chat ID: ${updatesData.description || 'Respons tidak valid.'}`);
+                }
+                
+                const chatIds = [];
+                for (const username of recipients) {
+                    const chat = updatesData.result.find(result => 
+                        result.message && result.message.chat && result.message.chat.username === username.replace('@', '')
+                    );
+                    if (!chat) {
+                        throw new Error(`Username ${username} tidak ditemukan di percakapan bot. Pastikan pengguna sudah kirim pesan ke bot Anda.`);
+                    }
+                    chatIds.push(chat.message.chat.id);
+                }
+
+                const dataUrl = 'https://alvianzlx.github.io/pusatjasteb/data.json';
+                const dataResponse = await fetch(dataUrl);
+
+                if (!dataResponse.ok) {
+                    throw new Error(`Gagal mengambil data akun: ${dataResponse.statusText}`);
+                }
+                const allAccounts = await dataResponse.json();
+                
+                function shuffleArray(array) {
+                    for (let i = array.length - 1; i > 0; i--) {
+                        const j = Math.floor(Math.random() * (i + 1));
+                        [array[i], array[j]] = [array[j], array[i]];
+                    }
+                    return array;
+                }
+                
+                const shuffledAccounts = shuffleArray([...allAccounts]);
+                const accounts = shuffledAccounts.slice(0, jumlah);
+                
+                async function kirimPesanDanTampilkan() {
+                    for (let i = 0; i < accounts.length; i++) {
+                        const acc = accounts[i];
+                        const now = new Date();
+                        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+                        const timestamp = now.toLocaleDateString('id-ID', options).replace(',', '') + ', Pukul ' + now.toLocaleTimeString('id-ID');
+
+                        const messageText = `
+╭───━━━━━━━━━━━━━━━───╮
+  💎  *DATA AKUN EKSKLUSIF* 💎
+╰───━━━━━━━━━━━━━━━───╯
+
+✨ _Terima kasih sudah memesan_
+_Data Anda telah siap!_
+
+━━━━━━━━━━━━
+◉  *INFO AKUN*
+━━━━━━━━━━━━
+  
+_Login Via:_ ${loginOptions[Math.floor(Math.random() * loginOptions.length)]}
+_Email:_
+\`${acc.email}\`
+
+_Password:_
+\`${acc.password}\`
+
+━━━━━━━━━━━━
+⚠️ _Peringatan: Jaga kerahasiaan data ini!_
+
+_Diproses pada:_
+🗓️ ${timestamp}
+
+_© WEBPANEL JASTEB_
+`;
+                        
+                        // Kirim pesan ke semua penerima
+                        for (const chatId of chatIds) {
+                            const telegramResponse = await fetch(apiUrl, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    chat_id: chatId,
+                                    text: messageText,
+                                    parse_mode: 'Markdown'
+                                })
+                            });
+                            if (!telegramResponse.ok) {
+                                console.warn(`Gagal kirim ke chat ID ${chatId}`);
+                            }
+                        }
+
+                        // Tambahkan item akun ke floating display
+                        const accountItem = document.createElement('div');
+                        accountItem.className = 'account-item';
+                        accountItem.innerHTML = `
+                            <p><span>Akun #${i + 1}:</span></p>
+                            <p><span>Email:</span> ${acc.email}</p>
+                            <p><span>Password:</span> ${acc.password}</p>
+                            <button class="copy-button" onclick="copyToClipboard('${acc.email} | ${acc.password}')">Salin</button>
+                        `;
+                        accountList.appendChild(accountItem);
+                        accountList.scrollTop = accountList.scrollHeight; // Auto-scroll ke bawah
+
+                        floatingStatus.className = 'status success';
+                        floatingStatus.textContent = `✅ Berhasil mengirim akun #${i + 1} dari ${jumlah}...`;
+                        
+                        // Tampilkan timer jeda
+                        if (i < accounts.length - 1) {
+                            let timeLeft = jeda;
+                            const timerDisplay = document.createElement('div');
+                            timerDisplay.className = 'live-timer';
+                            timerDisplay.textContent = `Jeda ${timeLeft} detik...`;
+                            accountList.appendChild(timerDisplay);
+
+                            const timerInterval = setInterval(() => {
+                                timeLeft--;
+                                timerDisplay.textContent = `Jeda ${timeLeft} detik...`;
+                                if (timeLeft <= 0) {
+                                    clearInterval(timerInterval);
+                                    accountList.removeChild(timerDisplay);
+                                }
+                            }, 1000);
+
+                            await new Promise(resolve => setTimeout(resolve, jeda * 1000));
+                        }
+                    }
+                    
+                    statusDiv.className = 'status success';
+                    statusDiv.textContent = '🎉 Semua akun berhasil dikirim!';
+                    floatingStatus.textContent = '🎉 Pengiriman Selesai! 🎉';
+                }
+
+                kirimPesanDanTampilkan();
+
+            } catch (error) {
+                statusDiv.className = 'status error';
+                statusDiv.textContent = `❌ Terjadi kesalahan: ${error.message}`;
+                floatingStatus.className = 'status error';
+                floatingStatus.textContent = `❌ Gagal: ${error.message}`;
+                console.error('Error:', error);
+            }
+        });
+    </script>
+</body>
+</html>
